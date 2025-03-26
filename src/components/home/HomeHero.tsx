@@ -72,7 +72,11 @@ const HomeHero = () => {
               )} 
               asChild
             >
+<<<<<<< HEAD
               <Link to="/trending-now">
+=======
+              <Link to="/Help">
+>>>>>>> 0d27cbd (Added new file: filename.ext)
                 Trending Now
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

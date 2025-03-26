@@ -4,6 +4,10 @@ import { UserProfile } from '@/types/auth';
 import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { formatPreferences } from '@/utils/dataHelpers';
+<<<<<<< HEAD
+=======
+import { PhoneAuthProvider, signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth';
+>>>>>>> 0d27cbd (Added new file: filename.ext)
 
 // Fetch user profile from Supabase
 export const fetchUserProfile = async (uid: string, currentUser: User | null): Promise<UserProfile | null> => {
@@ -632,3 +636,38 @@ export const forgotPassword = async (email: string): Promise<void> => {
     throw error;
   }
 };
+<<<<<<< HEAD
+=======
+
+
+export const initializePhoneAuth = () => {
+  if (typeof window !== 'undefined') {
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+      size: 'invisible',
+      callback: () => {},
+    });
+  }
+};
+
+export const loginWithPhone = async (phoneNumber: string) => {
+  try {
+    const appVerifier = window.recaptchaVerifier;
+    const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+    window.confirmationResult = confirmationResult;
+    return confirmationResult;
+  } catch (error) {
+    console.error('Phone auth error:', error);
+    throw error;
+  }
+};
+
+export const verifyPhoneCode = async (code: string) => {
+  try {
+    const result = await window.confirmationResult.confirm(code);
+    return result.user;
+  } catch (error) {
+    console.error('Code verification error:', error);
+    throw error;
+  }
+};
+>>>>>>> 0d27cbd (Added new file: filename.ext)

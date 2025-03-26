@@ -46,12 +46,31 @@ const firebaseConfig = {
   measurementId: "G-WYK98S3BPW"
 };
 
+<<<<<<< HEAD
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
+=======
+// Initialize Firebase with mobile configuration
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Configure Google provider for better mobile experience
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: 'select_account',
+  display: 'popup'
+});
+
+// Configure Facebook provider
+const facebookProvider = new FacebookAuthProvider();
+facebookProvider.setCustomParameters({
+  display: 'popup'
+});
+>>>>>>> 0d27cbd (Added new file: filename.ext)
 
 // Authentication functions
 export const registerWithEmail = async (email: string, password: string) => {

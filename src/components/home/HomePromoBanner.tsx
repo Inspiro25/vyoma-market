@@ -53,7 +53,11 @@ export default function HomePromoBanner() {
               "bg-orange-500 hover:bg-orange-600 text-white border-none shadow-md",
               "relative overflow-hidden group"
             )} asChild>
+<<<<<<< HEAD
               <Link to="/new-arrivals">
+=======
+              <Link to="/trending">
+>>>>>>> 0d27cbd (Added new file: filename.ext)
                 <span className="relative z-10 flex items-center">
                   Explore Collection
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />

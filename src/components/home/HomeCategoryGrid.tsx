@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getCategoriesWithDetails } from '@/lib/products/categories';
 import { motion } from 'framer-motion';
 
+<<<<<<< HEAD
 interface CategoryType {
   id: string;
   name: string;
@@ -149,3 +150,96 @@ export default function HomeCategoryGrid({ categories, isLoading }: CategoryGrid
     </motion.div>
   );
 }
+=======
+interface Category {
+  id: string;
+  name: string;
+  description?: string;
+  image?: string;
+}
+
+const HomeCategoryGrid = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategoriesWithDetails();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const getCategoryColor = (category: Category) => {
+    const categoryName = category.name?.toLowerCase() || '';
+    
+    switch (categoryName) {
+      case 'electronics':
+        return 'from-blue-500/70';
+      case 'fashion':
+        return 'from-purple-500/70';
+      case 'home':
+        return 'from-green-500/70';
+      case 'beauty':
+        return 'from-pink-500/70';
+      default:
+        return 'from-gray-500/70';
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+      {loading ? (
+        // Loading skeletons
+        Array(6).fill(null).map((_, index) => (
+          <Skeleton
+            key={`skeleton-${index}`}
+            className="h-48 rounded-lg"
+          />
+        ))
+      ) : (
+        // Actual categories
+        categories.map((category) => (
+          <motion.div
+            key={category.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Link
+              to={`/category/${category.id}`}
+              className="block relative h-48 rounded-lg overflow-hidden group"
+            >
+              <div
+                className={`absolute inset-0 bg-gradient-to-b ${getCategoryColor(category)} to-black/50 group-hover:to-black/70 transition-all duration-300`}
+              />
+              {category.image && (
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="w-full h-full object-cover"
+                />
+              )}
+              <div className="absolute bottom-0 left-0 p-4 text-white">
+                <h3 className="text-xl font-semibold mb-1">{category.name}</h3>
+                {category.description && (
+                  <p className="text-sm opacity-90">{category.description}</p>
+                )}
+              </div>
+            </Link>
+          </motion.div>
+        ))
+      )}
+    </div>
+  );
+};
+
+export default HomeCategoryGrid;
+>>>>>>> 0d27cbd (Added new file: filename.ext)

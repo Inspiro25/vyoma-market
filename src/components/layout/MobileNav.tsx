@@ -33,9 +33,16 @@ const MobileNav: React.FC<MobileNavProps> = ({ onClose }) => {
     { icon: <Percent size={18} />, label: 'Offers', path: '/offers' },
     { icon: <Store size={18} />, label: 'Shops', path: '/shops' },
     { icon: <Heart size={18} />, label: 'Wishlist', path: '/account/wishlist' },
+<<<<<<< HEAD
     { icon: <Bell size={18} />, label: 'Notifications', path: '/notifications' },
     { icon: <Settings size={18} />, label: 'Settings', path: '/account/settings' },
     { icon: <HelpCircle size={18} />, label: 'Help & Support', path: '/help' },
+=======
+    // Updated paths for notifications and help
+    { icon: <Bell size={18} />, label: 'Notifications', path: '/account/notifications' },
+    { icon: <Settings size={18} />, label: 'Settings', path: '/account/settings' },
+    { icon: <HelpCircle size={18} />, label: 'Help & Support', path: '/support' },
+>>>>>>> 0d27cbd (Added new file: filename.ext)
   ];
 
   const handleNavigation = () => {
@@ -121,7 +128,12 @@ const MobileNav: React.FC<MobileNavProps> = ({ onClose }) => {
         </div>
       ) : (
         <Link
+<<<<<<< HEAD
           to="/auth"
+=======
+          // Update the auth link
+          to="/auth"  // Updated from /login to /auth to match the Authentication component route
+>>>>>>> 0d27cbd (Added new file: filename.ext)
           className={cn(
             "flex items-center justify-center px-4 py-2.5 rounded-md",
             isDarkMode 

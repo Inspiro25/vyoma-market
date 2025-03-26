@@ -73,6 +73,7 @@ const Footer = () => {
         <div className="flex flex-wrap justify-between py-6 border-t border-border text-sm text-muted-foreground">
           <div className="flex items-center mb-4 md:mb-0">
             <Mail className="h-4 w-4 mr-2" />
+<<<<<<< HEAD
             <span>support@vyoma.com</span>
           </div>
           <div className="flex items-center mb-4 md:mb-0">
@@ -82,6 +83,17 @@ const Footer = () => {
           <div className="flex items-center">
             <MapPin className="h-4 w-4 mr-2" />
             <span>123 Fashion Street, Mumbai, India</span>
+=======
+            <span>vyoma.tech.in@gmail.com</span>
+          </div>
+          <div className="flex items-center mb-4 md:mb-0">
+            <Phone className="h-4 w-4 mr-2" />
+            <span>+91 9526338704</span>
+          </div>
+          <div className="flex items-center">
+            <MapPin className="h-4 w-4 mr-2" />
+            <span>Kannur , Kerala</span>
+>>>>>>> 0d27cbd (Added new file: filename.ext)
           </div>
         </div>
         

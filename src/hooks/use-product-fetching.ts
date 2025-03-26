@@ -57,6 +57,7 @@ export const fetchProducts = async ({
   pageSize = 12
 }: ProductFetchParams): Promise<{ products: Product[]; total: number }> => {
   try {
+<<<<<<< HEAD
     // Start building query
     let query = supabase.from('products').select('*', { count: 'exact' });
     
@@ -142,6 +143,21 @@ export const fetchProducts = async ({
     const products = data ? data.map(mapDbProductToProduct) : [];
     
     return { products, total: count || 0 };
+=======
+    const { data, error, count } = await supabase
+      .from('products')
+      .select('*', { count: 'exact' });
+
+    if (error) {
+      console.error('Error fetching products:', error);
+      return { products: [], total: 0 };
+    }
+
+    return {
+      products: data || [],
+      total: count || 0
+    };
+>>>>>>> 0d27cbd (Added new file: filename.ext)
   } catch (error) {
     console.error('Error in fetchProducts:', error);
     return { products: [], total: 0 };
@@ -175,7 +191,11 @@ export const fetchNewArrivals = async (limit = 8): Promise<Product[]> => {
   try {
     const { products } = await fetchProducts({
       isNew: true,
+<<<<<<< HEAD
       sortBy: 'newest',
+=======
+      sortBy: 'timestamp', // Change this to match your DB column
+>>>>>>> 0d27cbd (Added new file: filename.ext)
       limit,
     });
     
