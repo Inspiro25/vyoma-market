@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { useAuth } from './AuthContext';
 import { Product } from '@/lib/types/product';
 import AuthDialog from '@/components/search/AuthDialog';
+import { firebaseUIDToUUID } from '@/utils/format';
 
 interface WishlistContextType {
   wishlist: string[];
@@ -197,4 +198,23 @@ export const useWishlist = () => {
     throw new Error('useWishlist must be used within a WishlistProvider');
   }
   return context;
+};
+
+const fetchWishlist = async (userId: string) => {
+  if (!currentUser?.uid) return;
+  
+  try {
+    const supabaseUUID = firebaseUIDToUUID(currentUser.uid);
+    
+    const { data, error } = await supabase
+      .from('user_wishlists')
+      .select('product_id')
+      .eq('user_id', supabaseUUID);
+  
+    if (error) throw error;
+    return data?.map(item => item.product_id) || [];
+  } catch (error) {
+    console.error('Error fetching wishlist:', error);
+    return [];
+  }
 };

@@ -1,95 +1,34 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, ShoppingBag, Sparkle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Link, useNavigate } from 'react-router-dom';
-import { useTheme } from '@/contexts/ThemeContext';
-import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 
 const HomeHero = () => {
-  const { isDarkMode, primaryColor } = useTheme();
-  
   return (
-    <div className="relative mx-4 mb-4 overflow-hidden rounded-xl shadow-lg">
-      <div className={cn(
-        "relative z-10 p-6 md:p-10",
-        isDarkMode 
-          ? "bg-gradient-to-r from-gray-900/90 to-gray-800/80 border border-gray-800" 
-          : "bg-gradient-to-r from-orange-100/90 to-white/70 border border-orange-100"
-      )}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-lg space-y-4"
-        >
-          <div className="flex gap-2 items-center mb-2">
-            <Sparkle className={cn("h-5 w-5", isDarkMode ? "text-orange-400" : "text-orange-500")} />
-            <span className={cn(
-              "text-sm font-medium px-2 py-0.5 rounded-full",
-              isDarkMode ? "bg-orange-500/20 text-orange-300" : "bg-orange-100 text-orange-700"
-            )}>
-              New Collection
-            </span>
-          </div>
-          
-          <h1 className={cn(
-            "text-3xl md:text-4xl font-bold",
-            isDarkMode ? "text-white" : "text-gray-800"
-          )}>
-            Discover the latest in{" "}
-            <span className={isDarkMode ? "text-orange-400" : "text-orange-500"}>
-              fashion & technology
-            </span>
+    <div className="relative bg-background">
+      <div className="container mx-auto px-4 py-16 sm:py-24">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+            Discover Your Style
           </h1>
-          
-          <p className={cn(
-            "text-lg",
-            isDarkMode ? "text-gray-300" : "text-gray-600"
-          )}>
-            Shop the newest arrivals, limited editions, and exclusive deals
+          <p className="mt-6 text-lg leading-8 text-muted-foreground">
+            Explore our curated collection of premium clothing and accessories.
           </p>
-          
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Button 
-              className={isDarkMode ? "bg-orange-500 hover:bg-orange-600" : "bg-orange-500 hover:bg-orange-600"} 
-              asChild
+          <div className="mt-10 flex items-center justify-center gap-x-6">
+            <Link
+              to="/products"
+              className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary/90"
             >
-              <Link to="/category/all">
-                <ShoppingBag className="h-4 w-4 mr-2" />
-                Shop Now
-              </Link>
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              className={cn(
-                "border-2",
-                isDarkMode 
-                  ? "border-orange-500/30 text-orange-400 hover:bg-orange-950/50" 
-                  : "border-orange-200 hover:bg-orange-50"
-              )} 
-              asChild
+              Shop Now
+            </Link>
+            <Link
+              to="/categories"
+              className="text-sm font-semibold leading-6 text-muted-foreground hover:text-primary"
             >
-<<<<<<< HEAD
-              <Link to="/trending-now">
-=======
-              <Link to="/Help">
->>>>>>> 0d27cbd (Added new file: filename.ext)
-                Trending Now
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+              Browse Categories <span aria-hidden="true">→</span>
+            </Link>
           </div>
-        </motion.div>
+        </div>
       </div>
-      
-      <img 
-        src="https://images.unsplash.com/photo-1607082349566-187342175e2f?q=80&w=2070&auto=format&fit=crop"
-        alt="Hero Banner" 
-        className="absolute inset-0 w-full h-full object-cover -z-10 opacity-60"
-      />
     </div>
   );
 };

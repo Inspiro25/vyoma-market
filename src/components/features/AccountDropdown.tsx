@@ -1,26 +1,10 @@
+
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { 
-  User, 
-  LogOut, 
-  Settings, 
-  ShoppingBag, 
-  Heart, 
-  Bell, 
-  ChevronDown,
-  UserRound 
-} from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { User, LogOut, Settings, ShoppingBag, Heart, Bell, ChevronDown } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { getInitials } from '@/lib/utils';
@@ -33,16 +17,16 @@ const AccountDropdown = () => {
   const { unreadCount } = useNotifications();
   const navigate = useNavigate();
   const { isDarkMode } = useTheme();
-  
+
   const isLoggedIn = !!currentUser;
   const userName = userProfile?.displayName || currentUser?.email?.split('@')[0] || 'Guest';
   const userEmail = currentUser?.email || '';
   const avatarUrl = userProfile?.avatarUrl || '';
-  
+
   const handleLogin = () => {
     navigate('/login');
   };
-  
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -51,7 +35,7 @@ const AccountDropdown = () => {
       console.error('Logout error:', error);
     }
   };
-  
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -102,8 +86,8 @@ const AccountDropdown = () => {
       <DropdownMenuContent 
         align="end" 
         className={cn(
-          "w-56 p-2",
-          isDarkMode ? "border-gray-700 bg-gray-800 text-gray-200" : ""
+          "w-56 p-2 z-50",
+          isDarkMode ? "border-gray-700 bg-gray-800 text-gray-200" : "bg-white"
         )}
       >
         {isLoggedIn ? (
@@ -113,54 +97,48 @@ const AccountDropdown = () => {
               <div className="text-xs text-muted-foreground truncate">{userEmail}</div>
             </div>
             
-            <DropdownMenuSeparator className={isDarkMode ? "bg-gray-700" : ""} />
+            <DropdownMenuItem asChild>
+              <Link to="/account" className="flex items-center cursor-pointer">
+                <User className="h-4 w-4 mr-2" />
+                <span>My Profile</span>
+              </Link>
+            </DropdownMenuItem>
             
-            <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link to="/account" className="flex items-center cursor-pointer">
-                  <UserRound className="h-4 w-4 mr-2" />
-                  <span>My Profile</span>
-                </Link>
-              </DropdownMenuItem>
-              
-              <DropdownMenuItem asChild>
-                <Link to="/account/orders" className="flex items-center cursor-pointer">
-                  <ShoppingBag className="h-4 w-4 mr-2" />
-                  <span>My Orders</span>
-                </Link>
-              </DropdownMenuItem>
-              
-              <DropdownMenuItem asChild>
-                <Link to="/wishlist" className="flex items-center cursor-pointer">
-                  <Heart className="h-4 w-4 mr-2" />
-                  <span>Wishlist</span>
-                </Link>
-              </DropdownMenuItem>
-              
-              <DropdownMenuItem asChild>
-                <Link to="/notifications" className="flex items-center cursor-pointer">
-                  <Bell className="h-4 w-4 mr-2" />
-                  <span>Notifications</span>
-                  {unreadCount > 0 && (
-                    <Badge className={cn(
-                      "ml-auto h-5 px-1.5 text-xs font-medium",
-                      isDarkMode ? "bg-red-500 text-white" : "bg-red-500 text-white"
-                    )}>
-                      {unreadCount}
-                    </Badge>
-                  )}
-                </Link>
-              </DropdownMenuItem>
-              
-              <DropdownMenuItem asChild>
-                <Link to="/account/settings" className="flex items-center cursor-pointer">
-                  <Settings className="h-4 w-4 mr-2" />
-                  <span>Settings</span>
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuItem asChild>
+              <Link to="/account/orders" className="flex items-center cursor-pointer">
+                <ShoppingBag className="h-4 w-4 mr-2" />
+                <span>My Orders</span>
+              </Link>
+            </DropdownMenuItem>
             
-            <DropdownMenuSeparator className={isDarkMode ? "bg-gray-700" : ""} />
+            <DropdownMenuItem asChild>
+              <Link to="/wishlist" className="flex items-center cursor-pointer">
+                <Heart className="h-4 w-4 mr-2" />
+                <span>Wishlist</span>
+              </Link>
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem asChild>
+              <Link to="/notifications" className="flex items-center cursor-pointer">
+                <Bell className="h-4 w-4 mr-2" />
+                <span>Notifications</span>
+                {unreadCount > 0 && (
+                  <Badge className={cn(
+                    "ml-auto h-5 px-1.5 text-xs font-medium",
+                    isDarkMode ? "bg-red-500 text-white" : "bg-red-500 text-white"
+                  )}>
+                    {unreadCount}
+                  </Badge>
+                )}
+              </Link>
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem asChild>
+              <Link to="/account/settings" className="flex items-center cursor-pointer">
+                <Settings className="h-4 w-4 mr-2" />
+                <span>Settings</span>
+              </Link>
+            </DropdownMenuItem>
             
             <DropdownMenuItem 
               onClick={handleLogout} 
@@ -175,29 +153,12 @@ const AccountDropdown = () => {
           </>
         ) : (
           <>
-            <DropdownMenuLabel className={isDarkMode ? "text-gray-300" : ""}>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator className={isDarkMode ? "bg-gray-700" : ""} />
-            
             <DropdownMenuItem 
               onClick={handleLogin} 
               className="cursor-pointer"
             >
               <User className="h-4 w-4 mr-2" />
               <span>Sign in / Register</span>
-            </DropdownMenuItem>
-            
-            <DropdownMenuItem asChild>
-              <Link to="/tracking" className="flex items-center cursor-pointer">
-                <ShoppingBag className="h-4 w-4 mr-2" />
-                <span>Track Order</span>
-              </Link>
-            </DropdownMenuItem>
-            
-            <DropdownMenuItem asChild>
-              <Link to="/help" className="flex items-center cursor-pointer">
-                <Settings className="h-4 w-4 mr-2" />
-                <span>Help & Support</span>
-              </Link>
             </DropdownMenuItem>
           </>
         )}

@@ -18,6 +18,9 @@ import ElectronicsShowcase from '@/components/home/ElectronicsShowcase';
 import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
 import { updateVyomaClothingImages } from '@/lib/supabase/products';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileHome from '@/components/mobile/MobileHome';
+import DesktopHome from '@/components/desktop/DesktopHome'; // You'll need to create this
 
 const SectionLoading = () => <Skeleton className="h-32 w-full rounded-xl" />;
 const DealOfTheDay = lazy(() => import('@/components/features/DealOfTheDay'));
@@ -195,79 +198,38 @@ const BrandsSpotlight = () => {
 
 const Index = () => {
   const { 
-    categories, 
-    newArrivals, 
-    bestSellers, 
-    topRatedProducts, 
-    discountedProducts,
-    isLoading, 
-    dataLoaded,
+    categoriesQuery,
+    productsInfiniteQuery,
+    newArrivalsQuery,
+    bestSellersQuery,
+    topRatedQuery,
+    discountedQuery,
+    dataLoaded 
   } = useHomeData();
+
+  // Add proper null checks and default values
+  const topRatedProducts = topRatedQuery?.data || [];
+  const categories = categoriesQuery?.data || [];
+  const bestSellers = bestSellersQuery?.data || [];
+  const discountedProducts = discountedQuery?.data || [];
   
-  const [isPageLoaded, setIsPageLoaded] = useState(false);
+  // Add isDarkMode from useTheme
   const { isDarkMode } = useTheme();
 
-  useEffect(() => {
-    if (window.location.hash) {
-      const id = window.location.hash.replace('#', '');
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else {
-      window.scrollTo(0, 0);
-    }
-    
-    const timer = setTimeout(() => setIsPageLoaded(true), 300);
-    return () => clearTimeout(timer);
-  }, []);
-
-  React.useEffect(() => {
-    // Update product images for Vyoma Clothing shop
-    const updateImages = async () => {
-      try {
-        await updateVyomaClothingImages();
-      } catch (error) {
-        console.error('Error updating product images:', error);
-      }
-    };
-    
-    updateImages();
-  }, []);
-
-  if (isLoading && !categories.length) {
-    return (
-      <div className="min-h-screen">
-        <div className="space-y-6">
-          <Skeleton className={cn(
-            "h-48 w-full rounded-xl", 
-            isDarkMode ? "bg-gray-800" : "bg-gray-200"
-          )} />
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[...Array(4)].map((_, i) => (
-              <Skeleton key={i} className={cn(
-                "h-32 rounded-xl", 
-                isDarkMode ? "bg-gray-800" : "bg-gray-200"
-              )} />
-            ))}
-          </div>
-          <Skeleton className={cn(
-            "h-80 w-full rounded-xl", 
-            isDarkMode ? "bg-gray-800" : "bg-gray-200"
-          )} />
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className={cn(
-      "min-h-screen",
-      isDarkMode && "text-gray-100"
-    )}>
-      <main className="space-y-4">
+    <div className="min-h-screen">
+      <main>
         <HomeHero />
         
+        {/* Only render sections when data is available */}
+        {categories.length > 0 && (
+          <AnimatedSection delay={0.2}>
+            <Suspense fallback={<SectionLoading />}>
+              <HomeCategoryGrid categories={categories} />
+            </Suspense>
+          </AnimatedSection>
+        )}
+
         <FlashSaleTimer />
         
         <AnimatedSection delay={0.1}>
@@ -341,21 +303,23 @@ const Index = () => {
         </AnimatedSection>
         
         <AnimatedSection delay={0.3}>
-          <div className="container mx-auto px-4">
-            {newArrivals.length > 0 && (
-              <Suspense fallback={<SectionLoading />}>
-                <HomeProductShowcase
-                  title="New Arrivals"
-                  subtitle="Fresh styles just landed"
-                  products={newArrivals}
-                  linkTo="/new-arrivals"
-                  isLoaded={dataLoaded.newArrivals}
-                  layout="carousel"
-                  tag="new"
-                  showViewAll={false}
-                />
-              </Suspense>
-            )}
+          <div className="py-6">
+            <div className="container mx-auto px-4">
+              {newArrivalsQuery.data && newArrivalsQuery.data.length > 0 && (
+                <Suspense fallback={<SectionLoading />}>
+                  <HomeProductShowcase
+                    title="New Arrivals"
+                    subtitle="Fresh styles just landed"
+                    products={newArrivalsQuery.data}
+                    linkTo="/new-arrivals"
+                    isLoaded={dataLoaded.newArrivals}
+                    layout="carousel"
+                    tag="new"
+                    showViewAll={false}
+                  />
+                </Suspense>
+              )}
+            </div>
           </div>
         </AnimatedSection>
         
@@ -467,4 +431,10 @@ const Index = () => {
   );
 };
 
-export default Index;
+// Keep only one default export
+const Home = () => {
+  const isMobile = useIsMobile();
+  return isMobile ? <MobileHome /> : <Index />;
+};
+
+export default Home;

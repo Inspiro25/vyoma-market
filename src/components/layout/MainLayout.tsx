@@ -5,7 +5,6 @@ import Navigation from './Navigation';
 import Footer from './Footer';
 import MobileNavigation from '../features/MobileNavigation';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { useAuth } from '@/contexts/AuthContext';
 
 const MainLayout: React.FC = () => {
   const isMobile = useIsMobile();
@@ -13,7 +12,7 @@ const MainLayout: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navigation />
-      <main className="flex-grow pb-20 md:pb-0">
+      <main className="flex-grow">
         <Outlet />
       </main>
       <Footer />

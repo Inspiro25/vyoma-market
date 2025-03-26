@@ -6,17 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/**
- * Formats a number as currency
- * @param value The number to format
- * @param locale The locale to use for formatting (default: 'en-US')
- * @param currency The currency to use (default: 'INR')
- * @returns Formatted currency string
- */
 export const formatCurrency = (
   value: number,
-  locale = 'en-US',
-  currency = 'INR'
+  locale = 'en-IN', // Change locale to Indian
+  currency = 'INR' // Change currency to INR
 ): string => {
   return new Intl.NumberFormat(locale, {
     style: 'currency',

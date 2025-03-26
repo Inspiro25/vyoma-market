@@ -1,146 +1,101 @@
 
 import { initializeApp } from 'firebase/app';
-import { 
-  getAuth, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  signOut,
-  sendPasswordResetEmail,
-  updateProfile,
-  User
-} from 'firebase/auth';
-import { 
-  getFirestore, 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  setDoc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc,
-  onSnapshot,
-  query,
-  where,
-  orderBy,
-  limit,
-  arrayUnion,
-  arrayRemove,
-  Timestamp,
-  serverTimestamp
-} from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 
-// Your Firebase configuration
-// Replace these with your actual Firebase config values
 const firebaseConfig = {
-  apiKey: "AIzaSyAPlsR1J7WMxWjDjydr2tYMoeMm4fJhL4Y",
-  authDomain: "vyomachat.firebaseapp.com",
-  projectId: "vyomachat",
-  storageBucket: "vyomachat.firebasestorage.app",
-  messagingSenderId: "1044834196901",
-  appId: "1:1044834196901:web:821e4c734389a6107e9c4c",
-  measurementId: "G-WYK98S3BPW"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-<<<<<<< HEAD
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
+// Initialize providers
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
-=======
-// Initialize Firebase with mobile configuration
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 
-// Configure Google provider for better mobile experience
-const googleProvider = new GoogleAuthProvider();
+// Configure providers
 googleProvider.setCustomParameters({
-  prompt: 'select_account',
-  display: 'popup'
+  prompt: 'select_account'
 });
 
-// Configure Facebook provider
-const facebookProvider = new FacebookAuthProvider();
 facebookProvider.setCustomParameters({
   display: 'popup'
 });
->>>>>>> 0d27cbd (Added new file: filename.ext)
 
 // Authentication functions
 export const registerWithEmail = async (email: string, password: string) => {
-  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  return userCredential.user;
-};
-
-export const loginWithEmail = async (email: string, password: string) => {
-  const userCredential = await signInWithEmailAndPassword(auth, email, password);
-  return userCredential.user;
-};
-
-export const loginWithGoogle = async () => {
-  const userCredential = await signInWithPopup(auth, googleProvider);
-  return userCredential.user;
-};
-
-export const loginWithFacebook = async () => {
-  const userCredential = await signInWithPopup(auth, facebookProvider);
-  return userCredential.user;
-};
-
-export const logoutUser = async (): Promise<void> => {
-  await signOut(auth);
-};
-
-export const resetPassword = async (email: string): Promise<void> => {
-  await sendPasswordResetEmail(auth, email);
-};
-
-export const updateUserProfile = async (displayName: string, photoURL?: string): Promise<void> => {
-  const currentUser = auth.currentUser;
-  if (currentUser) {
-    await updateProfile(currentUser, {
-      displayName,
-      photoURL: photoURL || currentUser.photoURL
-    });
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.error('Error in registerWithEmail:', error);
+    throw error;
   }
 };
 
-export const getCurrentUser = (): User | null => {
-  return auth.currentUser;
+export const loginWithEmail = async (email: string, password: string) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.error('Error in loginWithEmail:', error);
+    throw error;
+  }
 };
 
-export { auth };
+export const loginWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    return result.user;
+  } catch (error) {
+    console.error('Error in loginWithGoogle:', error);
+    throw error;
+  }
+};
 
-// Firestore exports
-const db = getFirestore(app);
+export const loginWithFacebook = async () => {
+  try {
+    const result = await signInWithPopup(auth, facebookProvider);
+    return result.user;
+  } catch (error) {
+    console.error('Error in loginWithFacebook:', error);
+    throw error;
+  }
+};
 
+export const logoutUser = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error('Error in logoutUser:', error);
+    throw error;
+  }
+};
+
+export const resetPassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (error) {
+    console.error('Error in resetPassword:', error);
+    throw error;
+  }
+};
+
+// Export Firestore functions along with other exports
 export { 
-  db, 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  setDoc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc,
-  onSnapshot,
-  query,
-  where,
-  orderBy,
-  limit,
-  arrayUnion,
-  arrayRemove,
-  Timestamp,
-  serverTimestamp
+  auth, 
+  db,
+  doc,
+  setDoc,
+  getDoc
 };
-
-// Storage exports
-const storage = getStorage(app);
-export { storage, ref, uploadBytes, getDownloadURL };
+export default app;

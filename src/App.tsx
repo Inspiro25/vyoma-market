@@ -1,12 +1,14 @@
 
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import MobileSearch from './components/mobile/MobileSearch';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { CartProvider } from '@/contexts/CartContext';
 import { WishlistProvider } from '@/contexts/WishlistContext';
 import { OrderProvider } from '@/contexts/OrderContext';
 import ErrorBoundary from './components/ErrorBoundary';
+import Wishlist from '@/pages/Wishlist';
 
 // Layout components
 import MainLayout from '@/components/layout/MainLayout';
@@ -51,22 +53,55 @@ import AdminDashboard from '@/pages/AdminDashboard';
 
 function App() {
   return (
-    <ErrorBoundary>
-      <AuthProvider>
-        <ThemeProvider>
-          <CartProvider>
-            <WishlistProvider>
-              <OrderProvider>
-                <Routes>
-                  {/* Your routes here */}
-                </Routes>
-              </OrderProvider>
-            </WishlistProvider>
-          </CartProvider>
-        </ThemeProvider>
-      </AuthProvider>
-    </ErrorBoundary>
-  );
+    // Remove the Router wrapper here
+    <Routes>
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={<Home />} />
+        <Route path="products" element={<Products />} />
+        <Route path="products/:id" element={<ProductDetail />} />
+        <Route path="shops" element={<Shops />} />
+        <Route path="shops/:id" element={<ShopDetail />} />
+        <Route path="cart" element={<Cart />} />
+        <Route path="categories" element={<Categories />} />
+        <Route path="categories/:id" element={<CategoryPage />} />
+        <Route path="checkout" element={<Checkout />} />
+        <Route path="order-success" element={<OrderSuccess />} />
+        <Route path="search" element={<Search />} />
+        <Route path="offers" element={<Offers />} />
+        <Route path="wishlist" element={<Wishlist />} />
+      </Route>
+  
+        <Route path="/auth">
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+        </Route>
+  
+        <Route path="/account" element={<MainLayout />}>
+          <Route index element={<Account />} />
+          <Route path="orders" element={<AccountOrders />} />
+          <Route path="wishlist" element={<AccountWishlist />} />
+          <Route path="settings" element={<AccountSettings />} />
+        </Route>
+  
+        <Route path="/management" element={<DashboardLayout />}>
+          <Route index element={<ManagementDashboard />} />
+          <Route path="shops" element={<ManagementShops />} />
+          <Route path="users" element={<ManagementUsers />} />
+          <Route path="analytics" element={<ManagementAnalytics />} />
+          <Route path="settings" element={<ManagementSettings />} />
+          <Route path="offers" element={<ManagementOffers />} />
+        </Route>
+  
+        // Check the import statement for MobileSearch
+        import MobileSearch from './components/mobile/MobileSearch';
+  
+        // And check the route definition
+        <Route path="/search" element={<MobileSearch />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    );
 }
 
 export default App;

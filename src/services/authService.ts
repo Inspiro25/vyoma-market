@@ -4,15 +4,19 @@ import { UserProfile } from '@/types/auth';
 import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { formatPreferences } from '@/utils/dataHelpers';
-<<<<<<< HEAD
-=======
+import { User } from '@/types/user';
+import { UserProfile } from '@/types/profile';
+import { AuthError } from '@supabase/supabase-js';
 import { PhoneAuthProvider, signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth';
->>>>>>> 0d27cbd (Added new file: filename.ext)
+import { firebaseUIDToUUID } from '@/utils/format';
 
 // Fetch user profile from Supabase
 export const fetchUserProfile = async (uid: string, currentUser: User | null): Promise<UserProfile | null> => {
   try {
-    // First try to get user from Supabase
+    if (!uid) return null;
+    
+    const supabaseUUID = firebaseUIDToUUID(uid);
+    
     const { data: userProfile, error } = await supabase
       .from('user_profiles')
       .select(`
@@ -23,7 +27,7 @@ export const fetchUserProfile = async (uid: string, currentUser: User | null): P
         preferences,
         avatar_url
       `)
-      .eq('id', uid)
+      .eq('id', supabaseUUID)
       .single();
     
     if (error) {
@@ -636,27 +640,26 @@ export const forgotPassword = async (email: string): Promise<void> => {
     throw error;
   }
 };
-<<<<<<< HEAD
-=======
 
 
 export const initializePhoneAuth = () => {
-  if (typeof window !== 'undefined') {
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+  try {
+    const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
       size: 'invisible',
-      callback: () => {},
     });
+    return recaptchaVerifier;
+  } catch (error) {
+    console.error('Error initializing phone auth:', error);
+    throw error;
   }
 };
 
-export const loginWithPhone = async (phoneNumber: string) => {
+export const signInWithPhone = async (phoneNumber: string, recaptchaVerifier: RecaptchaVerifier) => {
   try {
-    const appVerifier = window.recaptchaVerifier;
-    const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-    window.confirmationResult = confirmationResult;
+    const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
     return confirmationResult;
   } catch (error) {
-    console.error('Phone auth error:', error);
+    console.error('Error signing in with phone:', error);
     throw error;
   }
 };
@@ -670,4 +673,3 @@ export const verifyPhoneCode = async (code: string) => {
     throw error;
   }
 };
->>>>>>> 0d27cbd (Added new file: filename.ext)

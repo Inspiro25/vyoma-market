@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { CartItem } from '@/contexts/CartContext';
 import { fetchProductById } from '@/lib/products'; // We need this to get product details
+import { firebaseUIDToUUID } from '@/utils/format';
 
 export const useCartStorage = (currentUser: any) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);

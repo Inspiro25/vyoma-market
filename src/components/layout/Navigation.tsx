@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { Button } from '../ui/button';
 import { 
   Search, 
   Menu, 
@@ -11,23 +11,91 @@ import {
   Sparkles,
   ChevronDown
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { useTheme } from '@/contexts/ThemeContext';
-import NotificationBadge from '@/components/features/NotificationBadge';
+import { cn } from '../../lib/utils';
+import { 
+  Sheet, 
+  SheetContent, 
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription 
+} from '../ui/sheet';
+import { Input } from '../ui/input';
+import { Badge } from '../ui/badge';
+import { useTheme } from '../../contexts/ThemeContext';
+import NotificationBadge from '../features/NotificationBadge';
 import { motion, AnimatePresence } from 'framer-motion';
-import MobileNav from './MobileNav';
+// Remove this line
+// import MobileNav from './MobileNav';
+
+// Add these imports at the top with other imports
+import { 
+  Home, ShoppingBag, Tag, TrendingUp, User, LogOut, Heart, 
+  Settings, Bell, HelpCircle, History, Store, ShoppingCart,
+  Users, MessageSquare
+} from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+
+// Add these new imports
+import { 
+  Compass, 
+  Zap, 
+  Gift, 
+  Coffee,
+  Sparkles as SparklesIcon,
+  Star, 
+  ShoppingBasket
+} from 'lucide-react';
+
+// Update navigation links with new sections
+// Keep only one instance of each array at the top
+const navigationLinks = [
+  { name: 'Discover', path: '/', icon: <Compass className="h-5 w-5" /> },
+  { name: 'Trending', path: '/trending', icon: <Zap className="h-5 w-5" /> },
+  { name: 'Deals', path: '/deals', icon: <Gift className="h-5 w-5" /> },
+  { name: 'Local', path: '/local', icon: <Coffee className="h-5 w-5" /> },
+];
+
+const featuredCategories = [
+  { name: 'New Arrivals', path: '/new', icon: <SparklesIcon className="h-5 w-5" /> },
+  { name: 'Best Sellers', path: '/best-sellers', icon: <Star className="h-5 w-5" /> },
+  { name: 'Flash Sales', path: '/flash-sales', icon: <ShoppingBasket className="h-5 w-5" /> },
+];
+
+const userFeatures = [
+  { name: 'My Orders', path: '/orders', icon: <ShoppingCart className="h-5 w-5" /> },
+  { name: 'Wishlist', path: '/wishlist', icon: <Heart className="h-5 w-5" /> },
+  { name: 'Followed Shops', path: '/followed-shops', icon: <Store className="h-5 w-5" /> },
+  { name: 'Purchase History', path: '/purchase-history', icon: <History className="h-5 w-5" /> },
+  { name: 'Notifications', path: '/notifications', icon: <Bell className="h-5 w-5" /> },
+];
+
+const additionalFeatures = [
+  { name: 'Become a Partner', path: '/partner', icon: <Users className="h-5 w-5" /> },
+  { name: 'Help & Support', path: '/help', icon: <HelpCircle className="h-5 w-5" /> },
+  { name: 'Settings', path: '/settings', icon: <Settings className="h-5 w-5" /> },
+];
 
 export function Navigation() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isDarkMode, toggleDarkMode, setTheme } = useTheme();
+  const { currentUser, logout } = useAuth(); // Add this line
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Add this function
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setMenuOpen(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -291,9 +359,156 @@ export function Navigation() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className={cn(
+                "flex flex-col overflow-y-auto",
                 isDarkMode ? "bg-gray-900 text-gray-100" : "bg-white text-gray-900"
               )}>
-                <MobileNav onClose={() => setMenuOpen(false)} />
+                <SheetHeader className="space-y-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+                  <SheetTitle className={cn(
+                    "text-2xl font-bold",
+                    isDarkMode ? "text-gray-100" : "text-gray-900"
+                  )}>
+                    Explore VYOMA
+                  </SheetTitle>
+                  
+                  {/* Quick Stats */}
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { label: 'Shops', value: '2.5K+' },
+                      { label: 'Products', value: '50K+' },
+                      { label: 'Users', value: '100K+' }
+                    ].map((stat) => (
+                      <div key={stat.label} className={cn(
+                        "text-center p-2 rounded-lg",
+                        isDarkMode ? "bg-gray-800" : "bg-orange-50"
+                      )}>
+                        <div className={cn(
+                          "text-lg font-bold",
+                          isDarkMode ? "text-orange-400" : "text-orange-600"
+                        )}>{stat.value}</div>
+                        <div className="text-sm text-gray-500">{stat.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </SheetHeader>
+
+                <div className="flex flex-col space-y-6 mt-6">
+                  {/* Featured Categories */}
+                  <div className="space-y-3">
+                    <h3 className={cn(
+                      "text-sm font-medium flex items-center gap-2",
+                      isDarkMode ? "text-orange-400" : "text-orange-600"
+                    )}>
+                      <Star className="h-4 w-4" />
+                      Featured
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      {featuredCategories.map((category) => (
+                        <Button
+                          key={category.path}
+                          variant="outline"
+                          className={cn(
+                            "h-24 flex flex-col items-center justify-center gap-2",
+                            isDarkMode 
+                              ? "bg-gray-800 hover:bg-gray-700 border-gray-700" 
+                              : "bg-orange-50 hover:bg-orange-100 border-orange-100"
+                          )}
+                          onClick={() => {
+                            navigate(category.path);
+                            setMenuOpen(false);
+                          }}
+                        >
+                          {category.icon}
+                          <span className="text-sm">{category.name}</span>
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Navigation Links */}
+                  <div className="space-y-3">
+                    <h3 className={cn(
+                      "text-sm font-medium flex items-center gap-2",
+                      isDarkMode ? "text-gray-400" : "text-gray-500"
+                    )}>
+                      <Compass className="h-4 w-4" />
+                      Navigation
+                    </h3>
+                    {navigationLinks.map((link) => (
+                      <Button
+                        key={link.path}
+                        variant="ghost"
+                        className={cn(
+                          "justify-start w-full gap-3 h-12",
+                          isDarkMode ? "hover:bg-gray-800" : "hover:bg-gray-100",
+                          location.pathname === link.path && (
+                            isDarkMode 
+                              ? "bg-gray-800 text-orange-400" 
+                              : "bg-orange-50 text-orange-600"
+                          )
+                        )}
+                        onClick={() => {
+                          navigate(link.path);
+                          setMenuOpen(false);
+                        }}
+                      >
+                        {link.icon}
+                        {link.name}
+                      </Button>
+                    ))}
+                  </div>
+
+                  {/* User Features */}
+                  {currentUser && (
+                    <div className="space-y-2">
+                      <h3 className={cn(
+                        "text-sm font-medium",
+                        isDarkMode ? "text-gray-400" : "text-gray-500"
+                      )}>My Account</h3>
+                      {userFeatures.map((feature) => (
+                        <Button
+                          key={feature.path}
+                          variant="ghost"
+                          className={cn(
+                            "justify-start w-full gap-3",
+                            isDarkMode ? "hover:bg-gray-800" : "hover:bg-gray-100"
+                          )}
+                          onClick={() => {
+                            navigate(feature.path);
+                            setMenuOpen(false);
+                          }}
+                        >
+                          {feature.icon}
+                          {feature.name}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Additional Features */}
+                  <div className="space-y-2">
+                    <h3 className={cn(
+                      "text-sm font-medium",
+                      isDarkMode ? "text-gray-400" : "text-gray-500"
+                    )}>More</h3>
+                    {additionalFeatures.map((feature) => (
+                      <Button
+                        key={feature.path}
+                        variant="ghost"
+                        className={cn(
+                          "justify-start w-full gap-3",
+                          isDarkMode ? "hover:bg-gray-800" : "hover:bg-gray-100"
+                        )}
+                        onClick={() => {
+                          navigate(feature.path);
+                          setMenuOpen(false);
+                        }}
+                      >
+                        {feature.icon}
+                        {feature.name}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
               </SheetContent>
             </Sheet>
           </div>
