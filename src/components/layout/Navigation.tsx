@@ -51,29 +51,28 @@ import {
 // Keep only one instance of each array at the top
 const navigationLinks = [
   { name: 'Discover', path: '/', icon: <Compass className="h-5 w-5" /> },
-  { name: 'Trending', path: '/trending', icon: <Zap className="h-5 w-5" /> },
-  { name: 'Deals', path: '/deals', icon: <Gift className="h-5 w-5" /> },
-  { name: 'Local', path: '/local', icon: <Coffee className="h-5 w-5" /> },
+  { name: 'Products', path: '/products', icon: <ShoppingBag className="h-5 w-5" /> },
+  { name: 'Categories', path: '/categories', icon: <Tag className="h-5 w-5" /> },
+  { name: 'Shops', path: '/shops', icon: <Store className="h-5 w-5" /> },
 ];
 
 const featuredCategories = [
-  { name: 'New Arrivals', path: '/new', icon: <SparklesIcon className="h-5 w-5" /> },
-  { name: 'Best Sellers', path: '/best-sellers', icon: <Star className="h-5 w-5" /> },
-  { name: 'Flash Sales', path: '/flash-sales', icon: <ShoppingBasket className="h-5 w-5" /> },
+  { name: 'New Arrivals', path: '/categories', icon: <SparklesIcon className="h-5 w-5" /> },
+  { name: 'Best Sellers', path: '/products', icon: <Star className="h-5 w-5" /> },
+  { name: 'Offers', path: '/offers', icon: <Gift className="h-5 w-5" /> },
 ];
 
 const userFeatures = [
-  { name: 'My Orders', path: '/orders', icon: <ShoppingCart className="h-5 w-5" /> },
-  { name: 'Wishlist', path: '/wishlist', icon: <Heart className="h-5 w-5" /> },
-  { name: 'Followed Shops', path: '/followed-shops', icon: <Store className="h-5 w-5" /> },
-  { name: 'Purchase History', path: '/purchase-history', icon: <History className="h-5 w-5" /> },
+  { name: 'My Orders', path: '/account/orders', icon: <ShoppingCart className="h-5 w-5" /> },
+  { name: 'Wishlist', path: '/account/wishlist', icon: <Heart className="h-5 w-5" /> },
   { name: 'Notifications', path: '/notifications', icon: <Bell className="h-5 w-5" /> },
+  { name: 'Settings', path: '/account/settings', icon: <Settings className="h-5 w-5" /> },
 ];
 
 const additionalFeatures = [
   { name: 'Become a Partner', path: '/partner', icon: <Users className="h-5 w-5" /> },
   { name: 'Help & Support', path: '/help', icon: <HelpCircle className="h-5 w-5" /> },
-  { name: 'Settings', path: '/settings', icon: <Settings className="h-5 w-5" /> },
+  { name: 'Account Settings', path: '/account/settings', icon: <Settings className="h-5 w-5" /> },
 ];
 
 export function Navigation() {
@@ -525,5 +524,6 @@ export function Navigation() {
     </header>
   );
 }
+
 
 export default Navigation;

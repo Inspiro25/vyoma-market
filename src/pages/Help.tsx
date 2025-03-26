@@ -3,7 +3,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Mail, Phone, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { 
+  Card, 
+  CardHeader, 
+  CardTitle, 
+  CardContent 
+} from '@/components/ui/card';
 import { 
   Accordion,
   AccordionContent,
@@ -14,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
+import { HelpCircle } from 'lucide-react';
 
 const Help = () => {
   const navigate = useNavigate();

@@ -1,28 +1,18 @@
 
-import { useState, useEffect } from 'react';
-import ProductCard from '@/components/ui/ProductCard';
+import React, { useState, useEffect } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { Product } from '@/lib/products';
-import { 
-  Pagination, 
-  PaginationContent, 
-  PaginationItem, 
-  PaginationLink, 
-  PaginationNext, 
-  PaginationPrevious,
-  PaginationFirst,
-  PaginationLast
-} from '@/components/ui/pagination';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Grid, List, SlidersHorizontal, TrendingUp, Sparkles } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Badge } from '@/components/ui/badge';
+import { Grid, List, SlidersHorizontal, Sparkles, TrendingUp } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface ProductGridProps {
   products: Product[];
   title?: string;
   subtitle?: string;
-  columns?: 2 | 3 | 4;
+  columns?: number;
   className?: string;
   showPagination?: boolean;
   itemsPerPage?: number;
@@ -32,9 +22,11 @@ interface ProductGridProps {
   showFilters?: boolean;
   useAlternateLayout?: boolean;
   highlightType?: 'new' | 'trending' | 'sale' | null;
+  isLoading?: boolean;
+  isDarkMode?: boolean;
 }
 
-const ProductGrid = ({
+export const ProductGrid = ({
   products,
   title,
   subtitle,
@@ -48,6 +40,8 @@ const ProductGrid = ({
   showFilters = false,
   useAlternateLayout = false,
   highlightType = null,
+  isLoading = false,
+  isDarkMode = false,
 }: ProductGridProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -114,6 +108,16 @@ const ProductGrid = ({
         return null;
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <Skeleton key={index} className="h-64 w-full rounded-md" />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className={`container mx-auto px-2 md:px-4 ${className}`}>
@@ -193,6 +197,7 @@ const ProductGrid = ({
               layout={viewMode === 'list' ? 'horizontal' : 'vertical'}
               rating={product.rating}
               reviewCount={product.reviewCount}
+              isDarkMode={isDarkMode}
             />
           </div>
         ))}

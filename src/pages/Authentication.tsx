@@ -461,9 +461,14 @@ const Authentication = () => {
                         Remember me
                       </label>
                     </div>
-                    <a href="#" className="text-sm text-orange-500 hover:underline">
+                    // Update the forgot password link
+                    <Link to="/auth/forgot-password" className="text-sm text-orange-500 hover:underline">
                       Forgot password?
-                    </a>
+                    </Link>
+                    
+                    // Update the terms and privacy links
+                    <Link to="/help/terms" className="text-orange-500 hover:underline">Terms of Service</Link>
+                    <Link to="/help/privacy" className="text-orange-500 hover:underline">Privacy Policy</Link>
                   </div>
                   
                   <Button 

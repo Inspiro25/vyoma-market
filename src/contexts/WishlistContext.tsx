@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from './AuthContext';
@@ -21,6 +22,7 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [isLoading, setIsLoading] = useState(true);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const { currentUser } = useAuth();
+  const navigate = useNavigate(); // Initialize useNavigate hook
   
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -90,8 +92,8 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [wishlist, isLoading]);
 
   const handleLogin = useCallback(() => {
-    window.location.href = '/auth';
-  }, []);
+    navigate('/auth/login');
+  }, [navigate]);
 
   const addToWishlist = useCallback(async (product: Product | string) => {
     if (!currentUser) {

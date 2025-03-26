@@ -9,6 +9,9 @@ import { WishlistProvider } from '@/contexts/WishlistContext';
 import { OrderProvider } from '@/contexts/OrderContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import Wishlist from '@/pages/Wishlist';
+import Notifications from './components/Notifications'; // Add this import
+import Help from '@/pages/Help'; // Add this import
+import Partner from '@/pages/Partner'; // Add this import
 
 // Layout components
 import MainLayout from '@/components/layout/MainLayout';
@@ -23,7 +26,7 @@ import NotFound from '@/pages/NotFound';
 import ShopDetail from '@/pages/ShopDetail';
 import Shops from '@/pages/Shops';
 import Cart from '@/pages/Cart';
-import Categories from '@/pages/NewArrivals'; // Using NewArrivals as Categories page
+import NewArrivals from '@/pages/NewArrivals'; // Using NewArrivals as Categories page
 import CategoryPage from '@/pages/CategoryPage'; // New category page
 import Login from '@/pages/Authentication'; // Using Authentication for Login
 import Register from '@/pages/Authentication'; // Using Authentication for Register too
@@ -53,7 +56,6 @@ import AdminDashboard from '@/pages/AdminDashboard';
 
 function App() {
   return (
-    // Remove the Router wrapper here
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
@@ -62,46 +64,50 @@ function App() {
         <Route path="shops" element={<Shops />} />
         <Route path="shops/:id" element={<ShopDetail />} />
         <Route path="cart" element={<Cart />} />
-        <Route path="categories" element={<Categories />} />
+        <Route path="categories" element={<NewArrivals />} />
         <Route path="categories/:id" element={<CategoryPage />} />
         <Route path="checkout" element={<Checkout />} />
         <Route path="order-success" element={<OrderSuccess />} />
         <Route path="search" element={<Search />} />
         <Route path="offers" element={<Offers />} />
-        <Route path="wishlist" element={<Wishlist />} />
+        <Route path="notifications" element={<Notifications />} />
+        <Route path="help" element={<Help />} />
+        <Route path="partner" element={<Partner />} />
       </Route>
-  
-        <Route path="/auth">
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="reset-password" element={<ResetPassword />} />
-        </Route>
-  
-        <Route path="/account" element={<MainLayout />}>
-          <Route index element={<Account />} />
-          <Route path="orders" element={<AccountOrders />} />
-          <Route path="wishlist" element={<AccountWishlist />} />
-          <Route path="settings" element={<AccountSettings />} />
-        </Route>
-  
-        <Route path="/management" element={<DashboardLayout />}>
-          <Route index element={<ManagementDashboard />} />
-          <Route path="shops" element={<ManagementShops />} />
-          <Route path="users" element={<ManagementUsers />} />
-          <Route path="analytics" element={<ManagementAnalytics />} />
-          <Route path="settings" element={<ManagementSettings />} />
-          <Route path="offers" element={<ManagementOffers />} />
-        </Route>
-  
-        // Check the import statement for MobileSearch
-        import MobileSearch from './components/mobile/MobileSearch';
-  
-        // And check the route definition
-        <Route path="/search" element={<MobileSearch />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    );
+
+      <Route path="/auth">
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="reset-password" element={<ResetPassword />} />
+      </Route>
+
+      <Route path="/account" element={<MainLayout />}>
+        <Route index element={<Account />} />
+        <Route path="orders" element={<AccountOrders />} />
+        <Route path="wishlist" element={<AccountWishlist />} />
+        <Route path="settings" element={<AccountSettings />} />
+      </Route>
+
+      <Route path="/management" element={<DashboardLayout />}>
+        <Route path="login" element={<ManagementLogin />} />
+        <Route index element={<ManagementDashboard />} />
+        <Route path="shops" element={<ManagementShops />} />
+        <Route path="users" element={<ManagementUsers />} />
+        <Route path="analytics" element={<ManagementAnalytics />} />
+        <Route path="settings" element={<ManagementSettings />} />
+        <Route path="offers" element={<ManagementOffers />} />
+      </Route>
+
+      <Route path="/admin">
+        <Route path="login" element={<AdminLogin />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="shop-dashboard" element={<ShopDashboard />} />
+      </Route>
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
 }
 
 export default App;
